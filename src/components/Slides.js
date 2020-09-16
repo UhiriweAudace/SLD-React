@@ -14,6 +14,7 @@ function Slides({ slides }) {
     }
     const onPrevHandler = () => {
         if (initial === 0) {
+            setInitial(0)
             setDisabled(true)
             setPrevDisable(true)
             setNexDisable(false)
@@ -22,8 +23,6 @@ function Slides({ slides }) {
         }
     }
     const onNextHandler = () => {
-        console.log(slides.length, initial)
-        setInitial(initial + 1)
         if (slides.length - 2 === initial) {
             setNexDisable(true)
         }
@@ -42,7 +41,7 @@ function Slides({ slides }) {
 
             {
                 slides.map((slide, index) => {
-                    return initial === index && (
+                    return initial + 1 === index + 1 && (
                         <div id="slide" className="card text-center" key={index}>
                             <h1 data-testid="title">{slide.title}</h1>
                             <p data-testid="text">{slide.text}</p>
