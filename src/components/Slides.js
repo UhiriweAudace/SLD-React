@@ -1,35 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function Slides({ slides }) {
-    const [initial, setInitial] = useState(1)
+    const [initial, setInitial] = useState(0)
     const [disabled, setDisabled] = useState(true);
     const [prevDisable, setPrevDisable] = useState(true)
     const [nextDisable, setNexDisable] = useState(false)
 
+    useEffect(() => {
+        if (initial > 0) {
+            setDisabled(false);
+            setPrevDisable(false);
+        } else {
+            setDisabled(true);
+            setPrevDisable(true);
+        }
+        if ((initial + 1) < slides.length) {
+            setNexDisable(false)
+        } else {
+            setNexDisable(true)
+        }
+    }, [initial, slides])
+
     const onRestartHandler = () => {
-        setInitial(1)
+        setInitial(0)
         setDisabled(true)
         setPrevDisable(true)
         setNexDisable(false)
     }
-    const onPrevHandler = () => {
-        if (initial - 1 === 1) {
-            setInitial(1)
-            setDisabled(true)
-            setPrevDisable(true)
-            setNexDisable(false)
-            return;
-        }
-        setInitial(initial - 1)
-    }
-
-    const onNextHandler = () => {
-        if (slides.length - 2 === initial) setNexDisable(true)
-        setInitial(initial + 1)
-        setDisabled(false)
-        setPrevDisable(false)
-    }
-
+    const onPrevHandler = () =>  setInitial((prev) => prev - 1)
+    const onNextHandler = () => setInitial((prev) => prev + 1)
+    
     return (
         <div>
             <div id="navigation" className="text-center">
@@ -37,16 +37,10 @@ function Slides({ slides }) {
                 <button data-testid="button-prev" className="small" onClick={onPrevHandler} disabled={prevDisable}>Prev</button>
                 <button data-testid="button-next" className="small" onClick={onNextHandler} disabled={nextDisable}>Next</button>
             </div>
-            {
-                slides.map((slide, index) => {
-                    return initial - 1 === index && (
-                        <div id="slide" className="card text-center" key={index}>
-                            <h1 data-testid="title">{slide.title}</h1>
-                            <p data-testid="text">{slide.text}</p>
-                        </div>
-                    )
-                })
-            }
+            <div id="slide" className="card text-center">
+                <h1 data-testid="title">{slides[initial].title}</h1>
+                <p data-testid="text">{slides[initial].text}</p>
+            </div>
         </div>
     );
 

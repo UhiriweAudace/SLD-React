@@ -1,8 +1,8 @@
-import React from "react";
-import App from "./App";
-import { render, within, fireEvent, cleanup } from "@testing-library/react";
+import React from 'react';
+import App from './App';
+import { render, within, fireEvent, cleanup } from '@testing-library/react';
 
-import "@testing-library/jest-dom/extend-expect";
+import '@testing-library/jest-dom/extend-expect';
 
 const testIds = {
   restartButton: "button-restart",
@@ -12,7 +12,7 @@ const testIds = {
   text: "text",
 };
 
-const makeSlides = (numSlides) => Array.from({ length: 10 }, (_, idx) => ({ title: `title ${idx}`, text: `text ${idx}` }));
+const makeSlides = (numSlides) => Array.from({ length: numSlides }, (_, idx) => ({ title: `title ${idx}`, text: `text ${idx}` }));
 
 const renderApp = (slides) => render(<App slides={slides} />);
 
@@ -22,7 +22,7 @@ afterEach(() => {
   cleanup();
 });
 
-test("App renders correctly", () => {
+test('App renders correctly', () => {
   const slides = makeSlides(2);
 
   const { getByTestId } = renderApp(slides);
@@ -46,7 +46,7 @@ test("App renders correctly", () => {
   expect(textElem).toHaveTextContent(slides[0].text);
 });
 
-test("Switching between slides works as expected", () => {
+test('Switching between slides works as expected', () => {
   const slides = makeSlides(5);
   const { getByTestId } = renderApp(slides);
 
@@ -56,17 +56,17 @@ test("Switching between slides works as expected", () => {
   const titleElem = getByTestId(testIds.title);
   const textElem = getByTestId(testIds.text);
 
-  const clicks = ["next", "prev", "prev", "next", "next", "restart", "next", "next", "prev"];
+  const clicks = ['next', 'next', 'next', 'prev', 'prev', 'prev', 'next', 'next', 'restart', 'next', 'next', 'next', 'next', 'prev'];
 
   let idx = 0;
   for (const click of clicks) {
-    if (click === "restart") {
+    if (click === 'restart') {
       fireEvent.click(restartButton);
       idx = 0;
-    } else if (click === "prev") {
+    } else if (click === 'prev') {
       fireEvent.click(prevButton);
       idx -= 1;
-    } else if (click === "next") {
+    } else if (click === 'next') {
       fireEvent.click(nextButton);
       idx += 1;
     }
